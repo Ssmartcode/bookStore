@@ -1,5 +1,6 @@
 const Product = require("../models/product");
-const Cart = require("../models/cart");
+const User = require("../models/user");
+const Order = require("../models/order");
 
 const getAllProducts = async (req, res, next) => {
   // Product.getAll((products) => );
@@ -11,24 +12,60 @@ const getProductById = async (req, res, next) => {
   res.render("shop/singleProduct", { product });
 };
 
-const addToCart = (req, res, next) => {
+const addToCart = async (req, res, next) => {
+  // get product from db
   const productId = req.body.productId;
-  Product.findById(productId, (product) => {
-    Cart.addToCart(productId, product.price);
-    res.redirect("/shop");
+  console.log(productId);
+  const product = await Product.findById(productId);
+
+  // get user's cart from db
+  const user = await User.findById(req.user.id);
+
+  // check if product is already in user's cart
+  const productInCart = user.cart.items.findIndex((item) => {
+    return item.productId.toString() === product.id;
   });
+  if (productInCart >= 0) {
+    user.cart.items[productInCart].quantity += 1;
+  } else {
+    user.cart.items.push({ productId: product, quantity: 1 });
+  }
+
+  user.cart.totalPrice += +product.price;
+  await user.save();
+  res.redirect("/shop");
 };
 
 const getCartProducts = async (req, res, next) => {
-  Cart.getCart((cart) => {
-    res.render("shop/cart", {
-      products: cart.products,
-      totalPrice: cart.totalPrice,
-    });
+  const existingUser = await User.findById(req.user.id).populate(
+    "cart.items.productId"
+  );
+  const items = existingUser.cart.items.map((item) => {
+    return { product: item.productId, quantity: item.quantity };
   });
+
+  res.render("shop/cart", { items, totalPrice: existingUser.cart.totalPrice });
 };
 
-const addOrder = (req, res, next) => {};
+const addOrder = async (req, res, next) => {
+  const user = await req.user.populate("cart.items.productId").execPopulate();
+
+  const order = new Order({
+    user: user.id,
+    products: user.cart.items.map((item) => {
+      return {
+        product: { ...item.productId._doc },
+        quantity: item.quantity,
+      };
+    }),
+    orderValue: user.cart.totalPrice,
+  });
+  await order.save();
+  user.cart.items = [];
+  user.cart.totalPrice = 0;
+  await user.save();
+  res.redirect("/shop/cart");
+};
 
 const getOrders = (req, res, next) => {};
 

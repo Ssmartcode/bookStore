@@ -6,12 +6,14 @@ block content
   .container
     h1.text-center.mb-1 Cart items: 
     ul.mb-1
-      each product in products
+      each item in items
         .list-item 
-          p id:#{product.id}
-          p quantity: #{product.qty}
+          p.mb-1 Product:#{item.product.title}
+          p.mb-1 Price:#{item.product.price}
+          p quantity: #{item.quantity}
     p 
       strong Total price: #{totalPrice} 
-        
+    form(action="/shop/orders", method="post") 
+      button.btn(type="submit") Order now      
 
     

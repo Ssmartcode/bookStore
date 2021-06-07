@@ -7,7 +7,7 @@ block content
       h1.my-2.text-center #{editMode ? `Edit product`:`Add new product`}
       form.d-flex.j-center.flex-column(action=`/admin/${editMode ? `edit/${productId}` : ""}` method="POST")
         input.form-control.mb-1(type="text" name="title" value=`${editMode ? product.title : ""}`)
-        input.form-control.mb-1(type="text" name="price" value=`${editMode ? product.price : 0}`) 
+        input.form-control.mb-1(type="number" name="price" step=0.01 value=`${editMode ? product.price : 0}`) 
         button.btn.btn-primary(type="submit") Submit
       
       

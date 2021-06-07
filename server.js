@@ -3,10 +3,26 @@ const path = require("path");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-mongoose.connect(process.env.DB_STRING, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const app = express();
+const User = require("./models/user");
+
+mongoose
+  .connect(process.env.DB_STRING, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    User.findOne().then((user) => {
+      if (!user) {
+        const newUser = new User({
+          userName: "deico",
+          userPassword: "a",
+          cart: { items: [], totalPrice: 0 },
+        });
+        newUser.save(() => console.log("User created"));
+      }
+    });
+  });
 const connection = mongoose.connection;
 
 connection.once("open", () =>
@@ -16,7 +32,12 @@ connection.on("error", () =>
   console.log("Something went wrong while trying to connect to the data base")
 );
 
-const app = express();
+app.use((req, res, next) => {
+  User.findOne().then((user) => {
+    req.user = user;
+    next();
+  });
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "pug");
