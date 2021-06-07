@@ -1,0 +1,143 @@
+:root {
+  --page-width: 1200px;
+  --dark-color: #231e23;
+  --light-color: #f8f8f8;
+  --primary-color: #39a6a3;
+  --secondary-color: #deeeea;
+  --accent-color: #bf1363;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: sans-serif;
+  color: #333;
+}
+/* utilities */
+a {
+  text-decoration: none;
+  display: inline-block;
+}
+.d-flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+.d-flex.j-center {
+  justify-content: center;
+}
+.d-flex.flex-column {
+  flex-direction: column;
+}
+.mb-1 {
+  margin-bottom: 1rem;
+}
+.mt-1 {
+  margin-top: 1rem;
+}
+.my-1 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.my-2 {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+.hidden {
+  display: none;
+}
+.text-center {
+  text-align: center;
+}
+.container {
+  max-width: var(--page-width);
+  margin: 0 auto;
+}
+.large-header {
+  font-size: 4.5rem;
+}
+/* styled list */
+ul {
+  list-style: none;
+}
+ul .list-item {
+  background: #f4f4f4;
+  margin: 0.25rem 0;
+  padding: 0.5rem 0.25rem;
+  border-radius: 1px;
+  border: 1px solid rgba(25, 25, 25, 0.1);
+}
+/* buttons */
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: var(--dark-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: var(--light-color);
+  font-size: 1.1rem;
+}
+.btn-light {
+  background: var(--light-color);
+  color: var(--dark-color);
+}
+.bnt-primary {
+  background: var(--primary-color);
+  color: var(--light-color);
+}
+.btn-accent {
+  background: var(--accent-color);
+  color: var(--light-color);
+}
+/* navigation */
+nav {
+  background: var(--dark-color);
+  color: var(--light-color);
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.link-item {
+  color: inherit;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 1rem 0.5rem;
+  transition: background 0.3s;
+}
+.link-item:hover {
+  background: var(--accent-color);
+}
+
+/* product-card */
+.product-item {
+  background: #f4f4f4;
+  border-radius: 5px;
+  padding: 1rem;
+  border: 1px solid rgba(25, 25, 25, 0.1);
+  text-align: center;
+  margin: 1rem 0.5rem;
+}
+.product-item__single {
+  background: #f4f4f4;
+  border-radius: 5px;
+  padding: 1rem;
+  border: 1px solid rgba(25, 25, 25, 0.1);
+  text-align: center;
+  margin: 5rem auto;
+  max-width: var(--page-width);
+}
+.product-item i {
+  cursor: pointer;
+}
+
+/* form control */
+.form-control {
+  border: 1px solid rgba(25, 25, 25, 0.1);
+  border-radius: 3px;
+  box-shadow: 5px 5px 10px rgab(100, 100, 100, 0.1);
+  font-size: 1.1rem;
+  padding: 0.5rem 0.25rem;
+  display: block;
+}

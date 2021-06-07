@@ -1,0 +1,14 @@
+extends ../layouts/main-layout
+block styles
+  title Dashboard
+block content
+  body 
+    .container.h-100 
+      h1.my-2.text-center #{editMode ? `Edit product`:`Add new product`}
+      form.d-flex.j-center.flex-column(action=`/admin/${editMode ? `edit/${productId}` : ""}` method="POST")
+        input.form-control.mb-1(type="text" name="title" value=`${editMode ? product.title : ""}`)
+        input.form-control.mb-1(type="text" name="price" value=`${editMode ? product.price : 0}`) 
+        button.btn.btn-primary(type="submit") Submit
+      
+      
+          

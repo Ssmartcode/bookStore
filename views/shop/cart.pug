@@ -1,0 +1,17 @@
+extends ../layouts/main-layout
+
+block styles 
+  title Cart 
+block content 
+  .container
+    h1.text-center.mb-1 Cart items: 
+    ul.mb-1
+      each product in products
+        .list-item 
+          p id:#{product.id}
+          p quantity: #{product.qty}
+    p 
+      strong Total price: #{totalPrice} 
+        
+
+    
