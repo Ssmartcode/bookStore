@@ -1,0 +1,35 @@
+extends ../layouts/main-layout
+block styles
+  title Dashboard
+block content
+  body 
+    .container.h-100 
+      h1.my-2.text-center #{editMode ? `Edit product`:`Add new product`}
+      form.d-flex.j-center.flex-column(action=`/seller/${editMode ? `edit/${productId}` : ""}` method="POST")
+        input.form-control.mb-1(type="text" name="title" value=`${editMode ? product.title : ""}`)
+        input.form-control.mb-1(type="number" name="price" step=0.01 value=`${editMode ? product.price : 0}`)
+        input(type="hidden" name="_csrf" value=csrfToken)
+        button.btn.btn-primary(type="submit") Submit
+      if !editMode && products.length > 0
+        .line.my-3
+        h1.text-center.mb-2 Products you have posted:
+        .products-list
+          each product in products
+            .product-item.pt-1
+              h3.mb-1 #{product.title}
+              form(action="/seller/delete" method="POST")
+                input(type="hidden" name="_csrf" value=csrfToken)
+              p Price: 
+                strong #{product.price} $
+              .actions
+                a.btn.btn-primary(href=`/seller/edit/${product.id}`) Edit
+                form(action="/seller/delete", method="post")
+                  input(type="hidden" name="productId" value=product.id) 
+                  input(type="hidden" name="_csrf" value=csrfToken)
+                  button(type="submit").btn.btn-accent.w-100 Delete
+                 
+      
+
+      
+      
+          

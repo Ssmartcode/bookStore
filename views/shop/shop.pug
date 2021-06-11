@@ -5,21 +5,18 @@ block content
   body 
     .container
       h1.text-center.my-2 Our books:
-      .d-flex.justify-center
+      .products-list
         if products.length > 0
           each product in products
-            .product-item 
+            .product-item.py-1
               h3.mb-1 #{product.title}
               form(action="/shop/cart" method="POST")
-                label(for="cart")
+                label(for=product.id)
                   i.my-1.fas.fa-cart-plus.fa-2x
-                input.hidden(type="submit" name="productId" id="cart" value=product.id)
+                input.hidden(type="submit" name="productId" id=product.id value=product.id)
+                input(type="hidden" name="_csrf" value=csrfToken)
               a.btn.mb-1(href=`/shop/${product.id}`) More about this
               p Price: 
                 strong #{product.price} $
-              //- a.btn.btn-accent(href=`/admin/edit/${product.id}`) Edit
-              //- form(action="/admin/delete" method="POST")
-              //-   input.hidden(type="text" name="productId" value=product.id)
-              //-   button.btn(type="submit") Delete  
         else 
           h2 No products to show

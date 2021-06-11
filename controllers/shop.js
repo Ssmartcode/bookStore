@@ -3,7 +3,6 @@ const User = require("../models/user");
 const Order = require("../models/order");
 
 const getAllProducts = async (req, res, next) => {
-  // Product.getAll((products) => );
   const products = await Product.find();
   res.render("shop/shop", { products });
 };
@@ -13,13 +12,14 @@ const getProductById = async (req, res, next) => {
 };
 
 const addToCart = async (req, res, next) => {
-  // get product from db
   const productId = req.body.productId;
-  console.log(productId);
+
+  // get product from db
   const product = await Product.findById(productId);
 
   // get user's cart from db
-  const user = await User.findById(req.user.id);
+  userId = req.userId;
+  const user = await User.findById(userId);
 
   // check if product is already in user's cart
   const productInCart = user.cart.items.findIndex((item) => {
@@ -28,30 +28,49 @@ const addToCart = async (req, res, next) => {
   if (productInCart >= 0) {
     user.cart.items[productInCart].quantity += 1;
   } else {
-    user.cart.items.push({ productId: product, quantity: 1 });
+    user.cart.items.push({ productId, quantity: 1 });
   }
 
   user.cart.totalPrice += +product.price;
-  await user.save();
+  try {
+    await user.save();
+  } catch (err) {
+    req.flash("error", "Something went wrong. please try agian later");
+  }
+  req.flash("success", "Your cart has been updated");
   res.redirect("/shop");
 };
 
 const getCartProducts = async (req, res, next) => {
-  const existingUser = await User.findById(req.user.id).populate(
-    "cart.items.productId"
-  );
-  const items = existingUser.cart.items.map((item) => {
+  const user = await User.findById(req.userId).populate("cart.items.productId");
+  const items = user.cart.items.map((item) => {
     return { product: item.productId, quantity: item.quantity };
   });
 
-  res.render("shop/cart", { items, totalPrice: existingUser.cart.totalPrice });
+  res.render("shop/cart", { items, totalPrice: user.cart.totalPrice });
+};
+
+const deleteCartItem = async (req, res, next) => {
+  const { productId } = req.body;
+
+  const user = await User.findById(req.userId).populate("cart.items.productId");
+  const deletingProduct = user.cart.items.find(
+    (item) => item.productId.id.toString() === productId
+  );
+  const newItems = user.cart.items.filter(
+    (item) => item.productId.id.toString() !== productId
+  );
+  user.cart.items = newItems;
+  user.cart.totalPrice -=
+    +deletingProduct.productId.price * +deletingProduct.quantity;
+  await user.save();
+  res.redirect("/shop/cart");
 };
 
 const addOrder = async (req, res, next) => {
-  const user = await req.user.populate("cart.items.productId").execPopulate();
-
+  const user = await User.findById(req.userId).populate("cart.items.productId");
   const order = new Order({
-    user: user.id,
+    user: req.userId,
     products: user.cart.items.map((item) => {
       return {
         product: { ...item.productId._doc },
@@ -60,10 +79,16 @@ const addOrder = async (req, res, next) => {
     }),
     orderValue: user.cart.totalPrice,
   });
-  await order.save();
-  user.cart.items = [];
-  user.cart.totalPrice = 0;
-  await user.save();
+  try {
+    await order.save();
+    user.cart.items = [];
+    user.cart.totalPrice = 0;
+    await user.save();
+  } catch (err) {
+    req.flash("error", "Something went wrong. please try agian later");
+    return next();
+  }
+  req.flash("success", "Your order has been sent!");
   res.redirect("/shop/cart");
 };
 
@@ -76,4 +101,5 @@ module.exports = {
   getCartProducts,
   addOrder,
   getOrders,
+  deleteCartItem,
 };

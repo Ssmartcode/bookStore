@@ -1,0 +1,18 @@
+extends ../layouts/main-layout
+
+block styles 
+  title Signup page 
+
+block content 
+  .container.d-flex.a-center.flex-column
+    h1.my-2 Please sign up:
+    form.text-center(action="/user/signup", method="post") 
+      input.mb-1.form-control(type="text" name="userName" placeholder="Name:")
+      input.mb-1.form-control(type="email", name="userMail" placeholder="E-mail address:")
+      input.mb-1.form-control(type="password", name="userPassword" placeholder="Password:")
+      input(type="hidden" name="_csrf" value=csrfToken)  
+      button.btn.mb-1(type="submit") Signup
+    if validationErrors 
+      each error in validationErrors 
+        .flash-message.flash-error
+          p=error.msg

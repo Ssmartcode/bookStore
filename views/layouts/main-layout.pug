@@ -11,8 +11,18 @@ html(lang="en")
   body 
     nav
       a.link-item(href="/shop") Products
-      a.link-item(href="/admin") Admin 
-      a.link-item(href="/shop/cart") Cart 
-      
+      if isAuthenticated
+        a.link-item(href="/seller") Seller Dashboard 
+        a.link-item(href="/shop/cart") Cart
+        form(action="/user/logout", method="post") 
+         input(type="hidden", name="_csrf" value=csrfToken)
+         button.link-item(type="submit")  Logout 
+      if !isAuthenticated
+        a.link-item(href="/user/login") Login
+        a.link-item(href="/user/signup") Signup
+    if flashMessages
+      each message in flashMessages
+        .div(class=`flash-message flash-${message.type}`)
+          p=message.text
     block content
 

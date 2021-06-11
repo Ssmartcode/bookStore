@@ -4,16 +4,28 @@ block styles
   title Cart 
 block content 
   .container
-    h1.text-center.mb-1 Cart items: 
-    ul.mb-1
-      each item in items
-        .list-item 
-          p.mb-1 Product:#{item.product.title}
-          p.mb-1 Price:#{item.product.price}
-          p quantity: #{item.quantity}
-    p 
-      strong Total price: #{totalPrice} 
-    form(action="/shop/orders", method="post") 
-      button.btn(type="submit") Order now      
+    h1.text-center.my-2 Cart items: 
+    if items.length
+      ul.mb-1
+        each item in items
+          .list-item 
+            p.mb-1 Product: #{item.product.title}
+            p.mb-1 Price: 
+              strong #{item.product.price}$
+            p.mb-1 quantity: 
+              strong #{item.quantity}
+            form(action="/shop/delete-cart-item", method="post") 
+              label(for=item.product.id)
+                i.fas.fa-trash.fa-2x
+              input(type="hidden" name="_csrf" value=csrfToken) 
+              input.hidden(type="submit" id=item.product.id name="productId" value=item.product.id)
 
+              
+      p 
+        strong Total price: #{totalPrice} 
+      form(action="/shop/orders", method="post") 
+        input(type="hidden" name="_csrf" value=csrfToken) 
+        button.btn(type="submit") Order now      
+    else 
+      h3.text-center Your cart is empty! Add products to your cart!
     
