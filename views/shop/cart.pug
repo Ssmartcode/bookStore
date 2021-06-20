@@ -6,21 +6,19 @@ block content
   .container
     h1.text-center.my-2 Cart items: 
     if items.length
-      ul.mb-1
+      ul.cart-items.mb-1
         each item in items
-          .list-item 
-            p.mb-1 Product: #{item.product.title}
-            p.mb-1 Price: 
-              strong #{item.product.price}$
-            p.mb-1 quantity: 
-              strong #{item.quantity}
-            form(action="/shop/delete-cart-item", method="post") 
-              label(for=item.product.id)
-                i.fas.fa-trash.fa-2x
-              input(type="hidden" name="_csrf" value=csrfToken) 
-              input.hidden(type="submit" id=item.product.id name="productId" value=item.product.id)
-
-              
+          .list-item
+            img(src=`/uploads/images/${item.product.image}`, alt="") 
+            .product-info 
+              p.mb-1 Product: #{item.product.title}
+              p.mb-1 Price: 
+                strong #{item.product.price}$
+              p.mb-1 quantity: 
+                strong #{item.quantity}
+              form(action="/shop/delete-cart-item", method="post") 
+                i.deleteFromCart.fas.fa-trash.fa-2x(data-productid=item.product.id data-csrf=crsfToken)
+  
       p 
         strong Total price: #{totalPrice} 
       form(action="/shop/orders", method="post") 

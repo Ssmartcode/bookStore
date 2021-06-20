@@ -5,18 +5,29 @@ block content
   body 
     .container
       h1.text-center.my-2 Our books:
-      .products-list
-        if products.length > 0
+      if products.length > 0
+        .products-list
           each product in products
             .product-item.py-1
               h3.mb-1 #{product.title}
+              img(src=`/uploads/images/${product.image}` alt="")
               form(action="/shop/cart" method="POST")
                 label(for=product.id)
                   i.my-1.fas.fa-cart-plus.fa-2x
                 input.hidden(type="submit" name="productId" id=product.id value=product.id)
                 input(type="hidden" name="_csrf" value=csrfToken)
-              a.btn.mb-1(href=`/shop/${product.id}`) More about this
+              a.btn.mb-1(href=`/shop/product/${product.id}`) More about this
               p Price: 
                 strong #{product.price} $
-        else 
-          h2 No products to show
+        .pagination
+          if currentPage !== 1
+            a(href=`/shop/?p=${prevPage}`)
+              i.fas.fa-chevron-left
+          span=currentPage
+          span /
+          span=totalPages 
+          if currentPage !== totalPages 
+            a(href=`/shop/?p=${nextPage}`)
+              i.fas.fa-chevron-right
+      else 
+        h2 No products to show

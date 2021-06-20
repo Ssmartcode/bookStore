@@ -15,8 +15,6 @@ const signupValidation = [
     .normalizeEmail()
     .custom(async (value) => {
       const user = await User.findOne({ userMail: value });
-      console.log(user);
-      console.log(value);
       if (user) {
         return Promise.reject("Please choose another e-mail address");
       }
@@ -25,7 +23,7 @@ const signupValidation = [
     .not()
     .isEmpty()
     .trim()
-    .isLength({ min: 3 }),
+    .isLength({ min: 1 }),
 ];
 const {
   loginGET,

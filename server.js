@@ -5,6 +5,8 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const csrf = require("csurf");
 const flash = require("connect-flash");
+const multer = require("multer");
+const { multerStorage, fileFilter } = require("./middleware/multer");
 
 require("dotenv").config();
 
@@ -41,6 +43,7 @@ app.set("view engine", "pug");
 app.set("views", "views");
 
 app.use(express.static(path.join(__dirname, "public")));
+app.use(multer({ storage: multerStorage, fileFilter }).single("image"));
 app.use(flash());
 app.use(require("./middleware/flashMessage"));
 app.use(csrfProtection);
@@ -57,10 +60,17 @@ app.use("/seller", require("./routes/seller"));
 app.use("/shop", require("./routes/shop").router);
 
 app.get("/", (req, res, next) => {
-  res.render("index");
+  res.redirect("/shop");
 });
 
 app.use((req, res, next) => {
   res.status(404).render("404page");
+});
+
+app.use((err, req, res, next) => {
+  if (res.headersSent) return console.log(err);
+  console.log(err);
+  req.flash("error", err.message);
+  res.redirect(req.path || "/shop");
 });
 app.listen("3000");

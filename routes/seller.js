@@ -8,15 +8,16 @@ const {
   editProductPOST,
   deleteProduct,
 } = require("../controllers/seller");
+const { isAuthenticated } = require("../middleware/isAuth");
 
-router.get("/", sellerDashboard);
+router.get("/", isAuthenticated, sellerDashboard);
 
-router.post("/", addProductPOST);
+router.post("/", isAuthenticated, addProductPOST);
 
-router.get("/edit/:id", editProductGET);
+router.get("/edit/:id", isAuthenticated, editProductGET);
 
-router.post("/edit/:id", editProductPOST);
+router.post("/edit/:id", isAuthenticated, editProductPOST);
 
-router.post("/delete", deleteProduct);
+router.delete("/delete/:productId", isAuthenticated, deleteProduct);
 
 module.exports = router;

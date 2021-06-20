@@ -5,11 +5,17 @@ block content
   body 
     .container.h-100 
       h1.my-2.text-center #{editMode ? `Edit product`:`Add new product`}
-      form.d-flex.j-center.flex-column(action=`/seller/${editMode ? `edit/${productId}` : ""}` method="POST")
+
+      //- add or edit a new product
+      form.d-flex.j-center.flex-column(action=`/seller/${editMode ? `edit/${productId}` : ""}` method="POST" enctype="multipart/form-data")
         input.form-control.mb-1(type="text" name="title" value=`${editMode ? product.title : ""}`)
         input.form-control.mb-1(type="number" name="price" step=0.01 value=`${editMode ? product.price : 0}`)
+        label(for="image")
+          input#image.mb-1(type="file", name="image")
         input(type="hidden" name="_csrf" value=csrfToken)
         button.btn.btn-primary(type="submit") Submit
+
+      //- seller's posted products
       if !editMode && products.length > 0
         .line.my-3
         h1.text-center.mb-2 Products you have posted:
@@ -17,18 +23,13 @@ block content
           each product in products
             .product-item.pt-1
               h3.mb-1 #{product.title}
-              form(action="/seller/delete" method="POST")
-                input(type="hidden" name="_csrf" value=csrfToken)
               p Price: 
                 strong #{product.price} $
               .actions
                 a.btn.btn-primary(href=`/seller/edit/${product.id}`) Edit
-                form(action="/seller/delete", method="post")
-                  input(type="hidden" name="productId" value=product.id) 
-                  input(type="hidden" name="_csrf" value=csrfToken)
-                  button(type="submit").btn.btn-accent.w-100 Delete
+                button.delete-product(type="submit" data-csrf=csrfToken data-productId=product._id).btn.btn-accent.w-100 Delete
                  
-      
+    script(src="/script.js") 
 
       
       

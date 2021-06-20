@@ -1,0 +1,15 @@
+extends ../layouts/main-layout
+block styles
+  title Your orders
+block content
+  body
+    ul.container.my-2
+      each order in orders 
+        .list-item 
+          h3.text-center.mb-1 Order id: #{order._id}
+          p.mb-1 Products: 
+            each item in order.products
+              a.border-box(href=`/shop/${item.product._id}`)=item.product._id 
+          p.mb-1 Total price: 
+            strong #{order.orderValue}
+          a(href=`/shop/orders/${order._id}`) Invoice

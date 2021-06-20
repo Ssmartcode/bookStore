@@ -14,9 +14,10 @@ html(lang="en")
       if isAuthenticated
         a.link-item(href="/seller") Seller Dashboard 
         a.link-item(href="/shop/cart") Cart
+        a.link-item(href="/shop/orders") Orders
         form(action="/user/logout", method="post") 
          input(type="hidden", name="_csrf" value=csrfToken)
-         button.link-item(type="submit")  Logout 
+         input.link-item(type="submit" value="Logout")    
       if !isAuthenticated
         a.link-item(href="/user/login") Login
         a.link-item(href="/user/signup") Signup

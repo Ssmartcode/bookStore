@@ -17,7 +17,11 @@ body {
   font-weight: 300;
   color: #333;
 }
-/* utilities */
+img {
+  width: 100%;
+  object-fit: cover;
+}
+/* UTILITIES */
 a {
   color: inherit;
   text-decoration: none;
@@ -83,7 +87,8 @@ a {
 }
 .container {
   max-width: var(--page-width);
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 .large-header {
   font-size: 4.5rem;
@@ -93,6 +98,19 @@ a {
   height: 0;
   border-bottom: 2px dotted var(--dark-color);
 }
+
+/* form control */
+.form-control {
+  border: 1px solid rgba(25, 25, 25, 0.1);
+  border-radius: 3px;
+  box-shadow: 5px 5px 10px rgba(100, 100, 100, 0.1);
+  font-size: 1.1rem;
+  padding: 0.5rem 0.25rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* flash-message */
 .flash-message {
   width: 100%;
@@ -177,6 +195,27 @@ nav {
   gap: 1rem;
 }
 
+/* pagination */
+.pagination {
+  text-align: center;
+  width: fit-content;
+  margin: auto;
+  padding: 0.25rem 1rem;
+  background: #f4f4f4;
+  border-radius: 3px;
+  color: #333;
+  margin-top: 2rem;
+  font-size: 1.3rem;
+}
+.pagination a {
+  color: inherit;
+  padding: 0.25rem 0.75rem;
+}
+.pagination a:hover,
+.pagination a.active {
+  text-decoration: underline;
+}
+
 /* product-card */
 .product-item {
   background: #f4f4f4;
@@ -185,6 +224,11 @@ nav {
   text-align: center;
   min-width: 300px;
 }
+.product-item img {
+  height: 250px;
+  object-fit: contain;
+}
+
 .product-item .actions {
   display: grid;
   margin-top: 1rem;
@@ -202,16 +246,32 @@ nav {
   margin: 5rem auto;
   max-width: var(--page-width);
 }
+.product-item__single img {
+  width: 60%;
+  margin: 0 auto;
+  height: 400px;
+  object-fit: contain;
+}
 .product-item i {
   cursor: pointer;
 }
 
-/* form control */
-.form-control {
+/* cart list item */
+.cart-items .list-item {
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+}
+.cart-items .product-info {
+  padding: 0 0.5rem;
+}
+.cart-items img {
+  height: 150px;
+  object-fit: contain;
+}
+.border-box {
   border: 1px solid rgba(25, 25, 25, 0.1);
-  border-radius: 3px;
-  box-shadow: 5px 5px 10px rgab(100, 100, 100, 0.1);
-  font-size: 1.1rem;
-  padding: 0.5rem 0.25rem;
-  display: block;
+  background: #fff;
+  margin-right: 1rem;
+  padding: 0 0.15rem;
+  cursor: pointer;
 }
